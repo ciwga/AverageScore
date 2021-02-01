@@ -16,7 +16,7 @@ class pdfTableValues():
         # spoint = spanLocation[0]
         # epoint = spanLocation[1]-4
         # self.outputName = pdffile[spoint:epoint]+'.csv'
-        if os.path.exists(self.name) == 'True':
+        if os.path.isfile(self.name):
             pass
         else:
             tabula.convert_into(pdffile, self.name, pages='all')
@@ -24,8 +24,9 @@ class pdfTableValues():
     def convert(self, column):
         ntype = []
         for translate in column:
-            trans = translate.replace(',', '.')
-            ntype.append(float(trans))
+            cvstr = str(translate)
+            transl = cvstr.replace(',', '.').replace('nan', '0')
+            ntype.append(float(transl))
         b = 0
         for cnvscores in ntype:
             b = b+cnvscores
