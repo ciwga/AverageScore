@@ -21,19 +21,24 @@ class pdfTableValues():
         else:
             tabula.convert_into(pdffile, self.name, pages='all')
 
+    def calculater(self, data):
+        a = 0
+        query = "What is the percentage effect of the exam? (Like 0.30): "
+        percent = float(input(query))  # 7
+        for cvScores in data:
+            a = a+(cvScores*float(percent))
+            roundScore = round(a/len(data))
+            normalScore = a/len(data)
+        os.system('cls')
+        print('Round:   ', roundScore, '\nAverage: ', normalScore)
+
     def convert(self, column):
         ntype = []
         for translate in column:
             cvstr = str(translate)
             transl = cvstr.replace(',', '.').replace('nan', '0')
             ntype.append(float(transl))
-        b = 0
-        for cnvscores in ntype:
-            b = b+cnvscores
-            roundCScore = round(b/len(ntype))
-            normalCScore = b/len(ntype)
-        os.system('cls')
-        print('Round:   ', roundCScore, '\nAverage: ', normalCScore)
+        self.calculater(ntype)
 
     def averageScore(self):
         df = pd.read_csv(self.name)
@@ -48,16 +53,11 @@ class pdfTableValues():
                 df.fillna(0, inplace=True)
                 self.convert(df1)
             else:
-                df[columName] = pd.to_numeric(df[columName], errors='coerce')  # 5
+                c = 'coerce'
+                df[columName] = pd.to_numeric(df[columName], errors=c)  # 5
                 df.fillna(0, inplace=True)  # 6
                 df1 = df[columName].values.tolist()
-                a = 0
-                for scores in df1:
-                    a = a+scores
-                roundScore = round(a/len(df1))
-                normalScore = a/len(df1)
-                os.system('cls')
-                print('Round:   ', roundScore, '\nAverage: ', normalScore)
+                self.calculater(df1)
 
 
 pdfTableValues().averageScore()
@@ -69,3 +69,4 @@ pdfTableValues().averageScore()
 # 4 = Search for comma in list to find float value that is string
 # 5 = errors='coerce' instead of 'ignore' : https://towardsdatascience.com/how-to-change-datatypes-in-pandas-in-4-minutes-677addf9a409
 # 6 = Fill all NaN values by 0
+# 7 = Only write 1 if you want to calculate only a lesson average score
