@@ -43,7 +43,7 @@ class pdfTableValues():
 
     def averageScore(self):
         df = pd.read_csv(self.name)
-        for names in range(1, len(df.columns.values)):
+        for names in range(1, len(df.columns.values)+1):
             z = dict(enumerate(df.columns.values, start=1))  # 1
         # print(z)
         # nmbr = int(input('Enter number: '))
