@@ -1,6 +1,6 @@
 # _*_ coding:utf-8 _*_
 import pandas as pd
-import tabula
+from tabula.io import convert_into
 import os
 import re
 
@@ -19,18 +19,19 @@ class pdfTableValues():
         if os.path.isfile(self.name):
             pass
         else:
-            tabula.convert_into(pdffile, self.name, pages='all')
+            convert_into(pdffile, self.name, pages='all')
 
-    def calculater(self, data):
+    def calculater(self, data, name):
         a = 0
         query = "What is the percentage effect of the exam? (Like 0.30): "
-        percent = float(input(query))  # 7
+        per = float(input(query))  # 7
         for cvScores in data:
-            a = a+(cvScores*float(percent))
+            a = a+(cvScores*float(per))
             roundScore = round(a/len(data))
             normalScore = a/len(data)
         os.system('cls')
-        print('Round:   ', roundScore, '\nAverage: ', normalScore)
+        print(f"{name} Round Average: {roundScore}\
+              \n{name} Average: {normalScore}")
 
     def convert(self, column):
         ntype = []
@@ -42,22 +43,23 @@ class pdfTableValues():
 
     def averageScore(self):
         df = pd.read_csv(self.name)
-        z = dict(enumerate(df.columns.values, start=1))  # 1
-        print(z)
-        nmbr = int(input('Enter number: '))
-        columName = z[nmbr]
-        df1 = df[columName].values.tolist()  # 2
-        r = re.compile(',')
-        if df[columName].dtype == 'object' or 'int':  # 3
-            if any(r.search(str(comma)) for comma in df1) is True:  # 4
-                df.fillna(0, inplace=True)
-                self.convert(df1)
-            else:
-                c = 'coerce'
-                df[columName] = pd.to_numeric(df[columName], errors=c)  # 5
-                df.fillna(0, inplace=True)  # 6
-                df1 = df[columName].values.tolist()
-                self.calculater(df1)
+        for names in range(1, len(df.columns.values)):
+            z = dict(enumerate(df.columns.values, start=1))  # 1
+        # print(z)
+        # nmbr = int(input('Enter number: '))
+            columName = z[names]
+            df1 = df[columName].values.tolist()  # 2
+            r = re.compile(',')
+            if df[columName].dtype == 'object' or 'int':  # 3
+                if any(r.search(str(comma)) for comma in df1) is True:  # 4
+                    df.fillna(0, inplace=True)
+                    self.convert(df1)
+                else:
+                    c = 'coerce'
+                    df[columName] = pd.to_numeric(df[columName], errors=c)  # 5
+                    df.fillna(0, inplace=True)  # 6
+                    df1 = df[columName].values.tolist()
+                    self.calculater(df1, columName)
 
 
 pdfTableValues().averageScore()
