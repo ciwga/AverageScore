@@ -19,5 +19,5 @@ This table seems pretty well, but you will see some problems if you will check t
 5. xxxxxx,100
 6. "" 👈
 
-**Do you see sixth? That is not correct, so you should check the CSV file for the correct average score. 
+**Did you see the sixth line? That is not correct, so you should check the CSV file for the correct average score. 
 Then, only delete that line and restart the code.**
