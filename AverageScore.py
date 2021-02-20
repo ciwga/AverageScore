@@ -33,16 +33,22 @@ class pdfTableValues():
         print(f"{name} Round Average: {roundScore}\
               \n{name} Average: {normalScore}")
 
-    def convert(self, column, cname):
+    def convert(self, column):
         ntype = []
         for translate in column:
             cvstr = str(translate)
             transl = cvstr.replace(',', '.').replace('nan', '0')
             ntype.append(float(transl))
-        self.calculater(ntype, cname)
+        self.calculater(ntype)
 
     def averageScore(self):
-        df = pd.read_csv(self.name)
+        r = re.compile("^[0-9]+")
+        with open(self.name, "r") as csvfile:
+            line = csvfile.readline()
+            if r.search(line):
+                df = pd.read_csv(self.name, header=None)
+            else:
+                df = pd.read_csv(self.name)
         for names in range(1, len(df.columns.values)+1):
             z = dict(enumerate(df.columns.values, start=1))  # 1
         # print(z)
@@ -53,7 +59,7 @@ class pdfTableValues():
             if df[columName].dtype == 'object' or 'int':  # 3
                 if any(r.search(str(comma)) for comma in df1) is True:  # 4
                     df.fillna(0, inplace=True)
-                    self.convert(df1, columName)
+                    self.convert(df1)
                 else:
                     c = 'coerce'
                     df[columName] = pd.to_numeric(df[columName], errors=c)  # 5
@@ -63,6 +69,7 @@ class pdfTableValues():
 
 
 pdfTableValues().averageScore()
+
 
 
 # 1 = Get column names
