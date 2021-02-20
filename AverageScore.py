@@ -42,10 +42,10 @@ class pdfTableValues():
         self.calculater(ntype)
 
     def averageScore(self):
-        r = re.compile("^[0-9]+")
+        integers = re.compile("^[0-9]+")
         with open(self.name, "r") as csvfile:
             line = csvfile.readline()
-            if r.search(line):
+            if integers.search(line):
                 df = pd.read_csv(self.name, header=None)
             else:
                 df = pd.read_csv(self.name)
