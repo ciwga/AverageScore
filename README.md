@@ -1,6 +1,17 @@
 # AverageScore
 ### Aim: Get average score from a table in pdf for a lesson
 
+### INSTALLATION:
+`git clone https://github.com/ciwga/AverageScore.git`
+
+`pip install -r requirements.txt`
+
+### USAGE:
+Run AverageScore.py
+
+To calculate average score for an exam when you see the question ("What is the percentage effect of the exam?"), you should write 1.
+
+### TIPS:
 Some tables in the pdf file do not what seems. For instance:
 
 Student ID | Score
